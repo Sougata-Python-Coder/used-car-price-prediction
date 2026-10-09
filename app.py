@@ -28,21 +28,41 @@ with st.form("car_form"):
     submitted = st.form_submit_button("Predict estimated price")
 
 if submitted:
-    brand = str(name).strip().split()[0].title() if str(name).strip() else "Unknown"
-    data = pd.DataFrame([{
-        "car_age": 2026 - int(year),
-        "km_driven": int(km_driven),
-        "fuel": fuel,
-        "seller_type": seller_type,
-        "transmission": transmission,
-        "owner": owner,
-        "mileage(km/ltr/kg)": float(mileage),
-        "engine": float(engine),
-        "max_power": float(max_power),
-        "seats": float(seats),
-        "brand": brand
-    }])
-    predicted_price = float(model.predict(data)[0])
-    st.subheader("Estimated selling price")
-    st.success(f"₹{max(0, predicted_price):,.0f}")
-    st.caption("The estimate depends on the dataset and model. Actual prices vary with condition, location, service history and market demand.")
+     try:
+        brand = (
+            str(name).strip().split()[0].title()
+            if str(name).strip()
+            else "Unknown"
+        )
+
+        data = pd.DataFrame([{
+            "car_age": 2026 - int(year),
+            "km_driven": int(km_driven),
+            "fuel": fuel,
+            "seller_type": seller_type,
+            "transmission": transmission,
+            "owner": owner,
+            "mileage(km/ltr/kg)": float(mileage),
+            "engine": float(engine),
+            "max_power": float(max_power),
+            "seats": float(seats),
+            "brand": brand
+        }])
+
+        st.write("Input data for prediction:")
+        st.dataframe(data)
+
+        predicted = model.predict(data)
+        predicted_price = float(predicted[0])
+
+        st.subheader("Estimated selling price")
+        st.success(f"₹{max(0, predicted_price):,.0f}")
+
+        st.caption(
+            "This is an educational estimate. Actual prices vary "
+            "with vehicle condition, location and market demand."
+        )
+
+    except Exception as e:
+        st.error("Prediction failed. Please check the model and input features.")
+        st.exception(e)

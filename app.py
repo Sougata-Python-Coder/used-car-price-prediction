@@ -4,7 +4,7 @@ import joblib
 from pathlib import Path
 
 st.set_page_config(page_title="Used Car Price Prediction", page_icon="🚗", layout="centered")
-MODEL_PATH = Path(__file__).parent / "models" / "linear_regression_model.joblib"
+MODEL_PATH = "linear_regression_model.joblib"
 model = joblib.load(MODEL_PATH)
 
 st.title("🚗 Used Car Price Prediction")

@@ -28,7 +28,7 @@ with st.form("car_form"):
     submitted = st.form_submit_button("Predict estimated price")
 
 if submitted:
-     try:
+        try:
         brand = (
             str(name).strip().split()[0].title()
             if str(name).strip()
@@ -49,9 +49,6 @@ if submitted:
             "brand": brand
         }])
 
-        st.write("Input data for prediction:")
-        st.dataframe(data)
-
         predicted = model.predict(data)
         predicted_price = float(predicted[0])
 
@@ -59,10 +56,11 @@ if submitted:
         st.success(f"₹{max(0, predicted_price):,.0f}")
 
         st.caption(
-            "This is an educational estimate. Actual prices vary "
-            "with vehicle condition, location and market demand."
+            "The estimate depends on the dataset and model. "
+            "Actual prices vary with condition, location, service history "
+            "and market demand."
         )
 
     except Exception as e:
-        st.error("Prediction failed. Please check the model and input features.")
+        st.error("Prediction failed.")
         st.exception(e)
